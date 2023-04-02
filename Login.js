@@ -1,8 +1,12 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { ScrollView } from 'react-native';
 import {TextInput,Button,Image, SafeAreaView } from 'react-native';
+
 import { mainViewstyle,view1style,view2style,view3style,view4style,view5style,view6style } from './Style';
+
+
+
 
 export default function Login({navigation}) {
   return (
@@ -40,6 +44,12 @@ export default function Login({navigation}) {
         color='black'>
 
         </Button>
+
+        <TouchableOpacity style={{textAlign:'center',marginTop:150}} onPress={()=>navigation.navigate('SignUp')}>
+            <Text style={{fontSize:15}}>New on Foodie Moodie?Sign Up</Text>
+            
+        </TouchableOpacity>
+
       </View>
     </View>
     </ScrollView>
