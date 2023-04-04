@@ -7,6 +7,10 @@ import { firebaseConfig } from './FirebaseConfig';
 import {getDatabase,ref,set} from 'firebase/database'
 import {initializeApp} from 'firebase/app'
 
+import {auth} from './FirebaseConfig';
+import {createUserWithEmailAndPassword,signInAnonymously,signInWithEmailAndPassword,onAuthStateChanged}from 'firebase/auth'
+
+
 
 
 const app = initializeApp(firebaseConfig);
@@ -27,10 +31,20 @@ const tableRef = ref(db,'user');
       console.log(error);
       
     });
-    console.log('tableRef', email,password);
+    // console.log('tableRef', email,password);
     }
     
-  
+  const handleSignUp =async()=>{
+    await createUserWithEmailAndPassword(auth,email,password)
+    .then((userCredential)=>{
+      const user = userCredential.user;
+      console.log(user);
+    }).catch((error)=>{
+      console.log(error);
+
+    })
+
+  }
   
   const [ checked, setChecked] = React.useState(false);
     const [email,setEmail] =React.useState('Email');
@@ -120,7 +134,8 @@ const tableRef = ref(db,'user');
       
       </View>
       <Text></Text>
-      <TouchableOpacity style={{backgroundColor:'salmon',padding:20,marginLeft:20,marginRight:20,borderBottomStartRadius:10,borderBottomEndRadius:10,borderTopEndRadius:10,borderTopStartRadius:10}}  onPress={()=>writeDatabase(email,password)}>
+      {/* // in case of writedatabase call writedatabase in onpress  */}
+      <TouchableOpacity style={{backgroundColor:'salmon',padding:20,marginLeft:20,marginRight:20,borderBottomStartRadius:10,borderBottomEndRadius:10,borderTopEndRadius:10,borderTopStartRadius:10}} onPress={()=>{handleSignUp()}}  > 
         <Text style={{textAlign:'center'}}>Create Account</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{paddingTop:100,marginLeft:90}}>
