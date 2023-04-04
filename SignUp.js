@@ -1,30 +1,45 @@
 import { View, Text,TextInput,Button,Image, SafeAreaView,ScrollView, TouchableOpacity} from 'react-native'
-import React from 'react'
-// import MyCheckBox from './MyCheckBox'
+import React, { useEffect } from 'react'
 import { Checkbox } from 'react-native-paper'
 import {useState} from 'react'
-
-
-// const FormScreen = () => {
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-
- 
-//     setUsername('');
-//     setPassword('');
-//   };
-// }
+import firebase from 'firebase/app';
+import { firebaseConfig } from './FirebaseConfig'; 
+import {getDatabase,ref,set} from 'firebase/database'
+import {initializeApp} from 'firebase/app'
 
 
 
+const app = initializeApp(firebaseConfig);
 
 export default function SignUp({navigation}) {
- 
-    const [ checked, setChecked] = React.useState(false);
+  const db = getDatabase();
+const tableRef = ref(db,'user');
+
+  const writeDatabase=(email, password)=>{
+    
+    
+    set(tableRef, {
+      username : email,
+      password : password
+  
+  
+    }).catch((error) => {
+      console.log(error);
+      
+    });
+    console.log('tableRef', email,password);
+    }
+    
+  
+  
+  const [ checked, setChecked] = React.useState(false);
     const [email,setEmail] =React.useState('Email');
     const handleClearTextEmail=()=>{
       setEmail('');
 
+    }
+    const handleEmailChange=(inputText)=>{
+      setEmail(inputText);
     }
 
     const [name,setName] =React.useState('Name');
@@ -38,19 +53,21 @@ export default function SignUp({navigation}) {
       setPassword('');
 
     }
+    const handlePasswordChange=(inputText)=>{
+      setPassword(inputText);
+    }
 
     const [confirm,setConfirm] =React.useState('Confirm Password');
     const handleClearTextConfirm=()=>{
       setConfirm('');
 
     }
-    // const handleFormSubmit = () => {
-    //   const databaseRef = firebase.database().ref('user');
-    //   const newUserRef = databaseRef.push();
-    //   newUserRef.set({
-    //     name,
-    //     password,
-    //   });}
+    
+    // useEffect(()=>{
+    //   writeDatabase;
+    //   console.log(email);
+    //   console.log(password);
+    //  });
     
   return (
     <View>
@@ -59,7 +76,7 @@ export default function SignUp({navigation}) {
 
       style={{backgroundColor:'white',height:55,width:390,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,borderTopLeftRadius:10,padding:10,fontSize:15,marginLeft:10,marginTop:10,color:'grey'}}
       value={email} 
-      onChangeText={setEmail} 
+      onChangeText={handleEmailChange} 
       onFocus={handleClearTextEmail}>
 
       </TextInput>
@@ -72,12 +89,13 @@ export default function SignUp({navigation}) {
       onFocus={handleClearTextName}>
 
       </TextInput>
+      
       <Text style={{fontSize:25,fontWeight:'bold',marginLeft:10,marginTop:15}}>Password</Text>
       <TextInput 
 
       style={{backgroundColor:'white',height:55,width:390,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,borderTopLeftRadius:10,padding:10,fontSize:15,marginLeft:10,marginTop:10,color:'grey'}}
       value={password} 
-      onChangeText={setPassword} 
+      onChangeText={handlePasswordChange} 
       onFocus={handleClearTextPassword}>
 
       </TextInput>
@@ -102,7 +120,7 @@ export default function SignUp({navigation}) {
       
       </View>
       <Text></Text>
-      <TouchableOpacity style={{backgroundColor:'salmon',padding:20,marginLeft:20,marginRight:20,borderBottomStartRadius:10,borderBottomEndRadius:10,borderTopEndRadius:10,borderTopStartRadius:10}} >
+      <TouchableOpacity style={{backgroundColor:'salmon',padding:20,marginLeft:20,marginRight:20,borderBottomStartRadius:10,borderBottomEndRadius:10,borderTopEndRadius:10,borderTopStartRadius:10}}  onPress={()=>writeDatabase(email,password)}>
         <Text style={{textAlign:'center'}}>Create Account</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{paddingTop:100,marginLeft:90}}>

@@ -56,12 +56,12 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   useEffect(()=>{
-    //const db = getDatabase();
+    
     const userinfo = ref(database, 'user');
     onValue(userinfo, (snapshot) => {
       const data = snapshot.val();
       console.log(data)
-     // updateStarCount(postElement, data);
+     
     });
    });
   return (
